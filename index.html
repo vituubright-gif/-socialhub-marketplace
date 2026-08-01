@@ -1,27 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SocialHub Marketplace</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SocialHub Marketplace</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Supabase browser client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
-<header><h1>SocialHub</h1><button id="signInBtn">Sign in</button></header>
-<main>
-<section class="hero"><h2>Social media marketplace</h2><p>Browse listings and connect with sellers.</p></section>
-<section class="toolbar">
-<input id="search" placeholder="Search listings">
-<select id="platformFilter"><option value="all">All platforms</option><option>Instagram</option><option>TikTok</option><option>YouTube</option></select>
-<select id="sortFilter"><option value="default">Sort</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select>
-</section>
-<p id="authStatus"></p>
-<section id="cards" class="grid"></section><p id="empty" class="hidden">No listings found.</p>
-</main>
-<div id="modal" class="modal hidden"><div class="modalBox">
-<button id="closeModal">×</button><h2 id="modalTitle">Sign in</h2>
-<form id="authForm"><input id="email" type="email" placeholder="Email address" required><input id="password" type="password" placeholder="Password" minlength="6" required><button id="authSubmit" type="submit">Sign in</button></form>
-<button id="toggleAuth">Create an account</button><p id="authMessage"></p>
-</div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
-</body></html>
+  <header class="topbar">
+    <div class="brand">SocialHub</div>
+    <button id="signInBtn" class="outline">Sign in</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Buy and sell social media assets</h1>
+      <p>Discover creator pages and digital social properties in one marketplace.</p>
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search listings">
+        <select id="platformFilter">
+          <option value="all">All platforms</option>
+          <option value="Instagram">Instagram</option>
+          <option value="TikTok">TikTok</option>
+          <option value="YouTube">YouTube</option>
+        </select>
+        <select id="sortFilter">
+          <option value="default">Sort</option>
+          <option value="low">Price: low to high</option>
+          <option value="high">Price: high to low</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="cards" class="grid"></section>
+    <p id="empty" class="empty hidden">No listings found.</p>
+    <p id="authStatus" class="status"></p>
+  </main>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <button id="closeModal" class="close" type="button">&times;</button>
+      <h2 id="modalTitle">Sign in</h2>
+      <form id="authForm">
+        <label>Email</label>
+        <input id="email" type="email" autocomplete="email" required>
+        <label>Password</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="6" required>
+        <button id="authSubmit" class="primary full" type="submit">Sign in</button>
+      </form>
+      <p id="authMessage" class="message"></p>
+      <button id="toggleAuth" class="link-button" type="button">Create an account</button>
+    </div>
+  </div>
+</body>
+</html>
