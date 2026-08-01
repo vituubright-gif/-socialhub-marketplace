@@ -1,121 +1,27 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SocialHub Marketplace</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SocialHub Marketplace</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#">SocialHub</a>
-    <nav>
-      <a href="#marketplace">Marketplace</a>
-      <a href="#sell">Sell</a>
-      <a href="#how">How it works</a>
-    </nav>
-    <button class="outline" id="loginBtn">Sign in</button>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div>
-        <p class="eyebrow">SOCIAL ACCOUNT MARKETPLACE</p>
-        <h1>Discover listings from independent sellers.</h1>
-        <p class="sub">A clean starter marketplace for browsing and managing social-media account listings.</p>
-        <div class="hero-actions">
-          <a class="primary" href="#marketplace">Browse listings</a>
-          <a class="secondary" href="#sell">Create a listing</a>
-        </div>
-        <p class="notice">Only list accounts and transfers that are permitted by the relevant platform's terms. Never collect passwords, recovery codes, or other sensitive credentials through this site.</p>
-      </div>
-      <div class="hero-card">
-        <div class="mini-stat"><strong id="listingCount">0</strong><span>active listings</span></div>
-        <div class="mini-stat"><strong>Free</strong><span>starter hosting</span></div>
-        <div class="mini-stat"><strong>24/7</strong><span>self-service browsing</span></div>
-      </div>
-    </section>
-
-    <section id="marketplace" class="section">
-      <div class="section-head">
-        <div><p class="eyebrow">MARKETPLACE</p><h2>Browse listings</h2></div>
-        <input id="search" class="search" placeholder="Search listings..." aria-label="Search listings">
-      </div>
-      <div class="filters">
-        <select id="platformFilter">
-          <option value="all">All platforms</option>
-          <option>Instagram</option>
-          <option>TikTok</option>
-          <option>YouTube</option>
-          <option>X</option>
-          <option>Facebook</option>
-        </select>
-        <select id="sortFilter">
-          <option value="newest">Newest</option>
-          <option value="low">Price: low to high</option>
-          <option value="high">Price: high to low</option>
-        </select>
-      </div>
-      <div id="cards" class="grid"></div>
-      <div id="empty" class="empty hidden">No matching listings.</div>
-    </section>
-
-    <section id="sell" class="section split">
-      <div>
-        <p class="eyebrow">SELL</p>
-        <h2>Create a listing</h2>
-        <p class="muted">This demo stores listings in your browser only. Connect a real database before using it as a public marketplace.</p>
-      </div>
-      <form id="listingForm" class="form">
-        <label>Platform
-          <select id="platform" required>
-            <option value="">Choose platform</option>
-            <option>Instagram</option><option>TikTok</option><option>YouTube</option>
-            <option>X</option><option>Facebook</option>
-          </select>
-        </label>
-        <label>Listing title
-          <input id="title" maxlength="70" placeholder="e.g. Creator page — 12K followers" required>
-        </label>
-        <label>Followers / subscribers
-          <input id="followers" type="number" min="0" placeholder="12000" required>
-        </label>
-        <label>Price (USD)
-          <input id="price" type="number" min="1" step="0.01" placeholder="50" required>
-        </label>
-        <label>Description
-          <textarea id="description" maxlength="220" placeholder="Describe the listing without sharing passwords or recovery information." required></textarea>
-        </label>
-        <button class="primary" type="submit">Publish listing</button>
-        <p id="formMsg" class="form-msg"></p>
-      </form>
-    </section>
-
-    <section id="how" class="section">
-      <p class="eyebrow">HOW IT WORKS</p>
-      <h2>Simple starter flow</h2>
-      <div class="steps">
-        <div><b>01</b><h3>Browse</h3><p>Visitors search and filter available listings.</p></div>
-        <div><b>02</b><h3>Review</h3><p>Buyers inspect public listing information before contacting a seller.</p></div>
-        <div><b>03</b><h3>Connect</h3><p>The demo uses a contact button. Add a compliant payment and transaction system separately.</p></div>
-      </div>
-    </section>
-  </main>
-
-  <footer><span>© 2026 SocialHub</span><span>Starter marketplace template</span></footer>
-
-  <div id="modal" class="modal hidden">
-    <div class="modal-box">
-      <button class="close" id="closeModal">×</button>
-      <h2>Sign in</h2>
-      <p class="muted">Demo only — no credentials are sent anywhere.</p>
-      <input placeholder="Email" type="email">
-      <input placeholder="Password" type="password">
-      <button class="primary" id="demoLogin">Continue</button>
-      <p id="loginMsg" class="form-msg"></p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+<header><h1>SocialHub</h1><button id="signInBtn">Sign in</button></header>
+<main>
+<section class="hero"><h2>Social media marketplace</h2><p>Browse listings and connect with sellers.</p></section>
+<section class="toolbar">
+<input id="search" placeholder="Search listings">
+<select id="platformFilter"><option value="all">All platforms</option><option>Instagram</option><option>TikTok</option><option>YouTube</option></select>
+<select id="sortFilter"><option value="default">Sort</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select>
+</section>
+<p id="authStatus"></p>
+<section id="cards" class="grid"></section><p id="empty" class="hidden">No listings found.</p>
+</main>
+<div id="modal" class="modal hidden"><div class="modalBox">
+<button id="closeModal">×</button><h2 id="modalTitle">Sign in</h2>
+<form id="authForm"><input id="email" type="email" placeholder="Email address" required><input id="password" type="password" placeholder="Password" minlength="6" required><button id="authSubmit" type="submit">Sign in</button></form>
+<button id="toggleAuth">Create an account</button><p id="authMessage"></p>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+</body></html>
