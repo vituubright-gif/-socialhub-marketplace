@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages - SocialHub</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">SocialHub</div>
+  <a href="index.html" class="outline">Home</a>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Messages</h1>
+    <p>Your SocialHub conversations with marketplace sellers.</p>
+  </section>
+
+  <section class="grid" id="messagesList">
+    <p class="status">Loading messages...</p>
+  </section>
+</main>
+
+<script>
+const SUPABASE_URL="https://kzydpyhwowiqibtiwtti.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_MKcJYgB2QzsushX-CnnDuA_UJGvMLBV";
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+
+const esc=v=>String(v??"")
+  .replaceAll("&","&amp;").replaceAll("<","&lt;")
+  .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+async function loadMessages(){
+  const box=document.getElementById("messagesList");
+
+  const {data:sessionData}=await client.auth.getSession();
+  const user=sessionData?.session?.user;
+
+  if(!user){
+    box.innerHTML="<p class='status'>Please sign in to view messages.</p>";
+    return;
+  }
+
+  // Load messages only. We do not rely on a Supabase relationship here.
+  const {data:messages,error}=await client
+    .from("messages")
+    .select("id,message,created_at,sender_id,seller_id,listing_id")
+    .or(`sender_id.eq.${user.id},seller_id.eq.${user.id}`)
+    .order("created_at",{ascending:false});
+
+  if(error){
+    console.error(error);
+    box.innerHTML="<p class='status'>Could not load messages: "+esc(error.message)+"</p>";
+    return;
+  }
+
+  if(!messages || messages.length===0){
+    box.innerHTML="<p class='status'>No messages yet.</p>";
+    return;
+  }
+
+  // Get the listing records directly using the listing IDs in the messages.
+  const ids=[...new Set(
+    messages.map(item=>item.listing_id).filter(Boolean)
+  )];
+
+  let listingsById={};
+
+  if(ids.length){
+    const {data:listings,error:listingsError}=await client
+      .from("listings")
+      .select("id,title,platform")
+      .in("id",ids);
+
+    if(listingsError){
+      console.error(listingsError);
+    }else{
+      (listings||[]).forEach(listing=>{
+        listingsById[String(listing.id)]=listing;
+      });
+    }
+  }
+
+  box.innerHTML=messages.map(item=>{
+    const listing=listingsById[String(item.listing_id)];
+    const title=listing?.title || "Marketplace listing";
+    const platform=listing?.platform || "Platform unavailable";
+    const role=item.sender_id===user.id ? "You" : "Seller";
+    const time=new Date(item.created_at).toLocaleString();
+
+    return `
+      <article class="card">
+        <span class="tag">${esc(platform)}</span>
+        <h3>${esc(title)}</h3>
+        <p><strong>${role}:</strong> ${esc(item.message)}</p>
+        <small>${esc(time)}</small>
+      </article>`;
+  }).join("");
+}
+
+loadMessages();
+</script>
+</body>
+</html>
